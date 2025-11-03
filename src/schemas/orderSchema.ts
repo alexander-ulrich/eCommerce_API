@@ -6,5 +6,6 @@ export const orderInputSchema = z
     products: z.array(z.string({ message: "Line item is required." }), {
       message: "At least one line item is required to place an order.",
     }),
+    total: z.number({ message: "Total cost is required to place an order." }),
   })
   .strict();
