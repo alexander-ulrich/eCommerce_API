@@ -1,4 +1,10 @@
 import "#db";
+import {
+  categoryRouter,
+  orderRouter,
+  productRouter,
+  userRouter,
+} from "#routers";
 import express from "express";
 
 const app = express();
@@ -8,6 +14,10 @@ const port = 3000;
 app.use(express.json());
 
 //Routes
+app.use("/users", userRouter);
+app.use("/categories", categoryRouter);
+app.use("/products", productRouter);
+app.use("/orders", orderRouter);
 
 //Error Handling
 
