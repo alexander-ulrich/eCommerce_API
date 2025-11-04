@@ -1,14 +1,16 @@
 import { Document, model, Schema, Types } from "mongoose";
 
 export interface IOrder extends Document {
-  products: string[];
-  total: number;
+  userID: String;
+  products: String[];
+  total: Number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 const orderSchema = new Schema<IOrder>(
   {
+    userID: { type: Types.ObjectId, ref: "User", required: true },
     products: {
       type: [Types.ObjectId],
       ref: "LineItem",
