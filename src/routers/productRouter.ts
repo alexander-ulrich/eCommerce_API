@@ -1,14 +1,21 @@
-import { Router } from "express";
+import {
+  createNewProduct,
+  deleteProductByID,
+  getAllProducts,
+  getProductByID,
+  updateProductByID,
+} from "#controllers";
+import express, { Router } from "express";
 
 const productRouter = Router();
 
 //Valid Routes
-// productRouter.get("/", getAllProducts);
-// productRouter.post("/", placeNewProduct);
+productRouter.get("/", express.urlencoded(), getAllProducts);
+productRouter.post("/", createNewProduct);
 
-// productRouter.get("/:id", getProductByID);
-// productRouter.put("/:id", updateProductByID);
-// productRouter.delete("/:id", deleteProductByID);
+productRouter.get("/:id", getProductByID);
+productRouter.put("/:id", updateProductByID);
+productRouter.delete("/:id", deleteProductByID);
 
 //Method not allowed
 productRouter.put("/", (req, res) =>
