@@ -3,12 +3,12 @@ import { Router } from "express";
 const categoryRouter = Router();
 
 //Valid Routes
-categoryRouter.get("/", getAllCategories);
-categoryRouter.post("/", placeNewCategory);
+// categoryRouter.get("/", getAllCategories);
+// categoryRouter.post("/", placeNewCategory);
 
-categoryRouter.get("/:id", getCategoryByID);
-categoryRouter.put("/:id", updateCategoryByID);
-categoryRouter.delete("/:id", deleteCategoryByID);
+// categoryRouter.get("/:id", getCategoryByID);
+// categoryRouter.put("/:id", updateCategoryByID);
+// categoryRouter.delete("/:id", deleteCategoryByID);
 
 //Method not allowed
 categoryRouter.put("/", (req, res) =>

@@ -1,10 +1,17 @@
+import {
+  deleteUserByID,
+  getAllUsers,
+  getUserByID,
+  registerUser,
+  updateUserByID,
+} from "#controllers";
 import { Router } from "express";
 
 const userRouter = Router();
 
 //Valid Routes
 userRouter.get("/", getAllUsers);
-userRouter.post("/", placeNewUser);
+userRouter.post("/", registerUser);
 
 userRouter.get("/:id", getUserByID);
 userRouter.put("/:id", updateUserByID);

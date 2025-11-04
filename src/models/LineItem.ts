@@ -22,4 +22,4 @@ const lineItemSchema = new Schema<ILineItem>(
   { timestamps: true }
 );
 
-export default model<ILineItem>("Category", lineItemSchema);
+export default model<ILineItem>("LineItem", lineItemSchema);
