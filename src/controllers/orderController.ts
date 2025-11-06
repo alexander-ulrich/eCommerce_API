@@ -31,7 +31,7 @@ export const placeOrder: RequestHandler<
     total += product.price * p.quantity;
   }
   const newOrder = await Order.create<OrderInputDTO>({
-    userID: userId,
+    userId: userId,
     products: products,
   });
   newOrder.total = total;

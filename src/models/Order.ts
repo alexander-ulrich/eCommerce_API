@@ -1,15 +1,15 @@
 import { Document, model, Schema, Types } from "mongoose";
 
-export interface IOrder extends Document {
-  userId: String;
-  products: [{ product: String; quantity: Number }];
-  total: Number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+// export interface IOrder extends Document {
+//   userId: string;
+//   products: [{ product: string; quantity: number }];
+//   total: number;
+//   createdAt?: Date;
+//   updatedAt?: Date;
+// }
 
 const lineItemSchema = new Schema({
-  product: {
+  lineItem: {
     type: Schema.Types.ObjectId,
     ref: "Product",
     required: true,
@@ -20,9 +20,9 @@ const lineItemSchema = new Schema({
   },
 });
 
-const orderSchema = new Schema<IOrder>(
+const orderSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: String, ref: "User", required: true },
     products: {
       type: [lineItemSchema],
       default: [],
@@ -33,4 +33,4 @@ const orderSchema = new Schema<IOrder>(
   { timestamps: true }
 );
 
-export default model<IOrder>("Order", orderSchema);
+export default model("Order", orderSchema);
