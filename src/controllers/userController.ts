@@ -10,7 +10,7 @@ export const getAllUsers: RequestHandler<unknown, UserDTO[], unknown> = async (
   req,
   res
 ) => {
-  const userList = await User.find();
+  const userList = await User.find().lean();
 
   if (!userList.length)
     throw new Error("No registered Users found.", { cause: { status: 404 } });
@@ -24,14 +24,14 @@ export const registerUser: RequestHandler<
   UserInputDTO
 > = async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ email }).select("-password");
+  const user = await User.findOne({ email }).select("-password").lean();
   if (user)
     throw new Error("User with this E-Mail already exists!", {
       cause: { status: 409 },
     });
 
   await User.create<UserInputDTO>(req.body);
-  const newUser = await User.findOne({ email }).select("-password");
+  const newUser = await User.findOne({ email }).select("-password").lean();
 
   return res.status(201).json(newUser!);
 };
@@ -42,7 +42,7 @@ export const getUserByID: RequestHandler<
   unknown
 > = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).select("-password");
+  const user = await User.findById(id).select("-password").lean();
   if (!user) throw new Error("User not found.", { cause: { status: 404 } });
 
   return res.json(user);
@@ -51,16 +51,15 @@ export const getUserByID: RequestHandler<
 export const updateUserByID: RequestHandler<
   { id: string },
   UserDTO,
-  UserInputDTO
+  UserDTO
 > = async (req, res) => {
   const { id } = req.params;
-  const { name, email, password } = req.body as UserInputDTO;
+  const { name, email } = req.body;
   let user = await User.findById(id).select("-password");
   if (!user) throw new Error("User not found.", { cause: { status: 404 } });
 
   user.name = name;
   user.email = email;
-  user.password = password;
 
   await user.save();
   const updatedUser = await User.findById(id).select("-password");
@@ -77,7 +76,7 @@ export const deleteUserByID: RequestHandler<
   const deletedUser = await User.findByIdAndDelete(id, {
     new: true,
     runValidators: true,
-  });
+  }).lean();
   if (!deletedUser)
     throw new Error("User not found.", { cause: { status: 404 } });
 

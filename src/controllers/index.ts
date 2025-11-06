@@ -1,23 +1,4 @@
-export {
-  deleteUserByID,
-  getAllUsers,
-  getUserByID,
-  registerUser,
-  updateUserByID,
-} from "./userController.ts";
-
-export {
-  createNewProduct,
-  deleteProductByID,
-  getAllProducts,
-  getProductByID,
-  updateProductByID,
-} from "./productController.ts";
-
-export {
-  createNewCategory,
-  deleteCategoryByID,
-  getAllCategories,
-  getCategoryByID,
-  updateCategoryByID,
-} from "./categoryController.ts";
+export * from "./userController.ts";
+export * from "./productController.ts";
+export * from "./categoryController.ts";
+export * from "./orderController.ts";
