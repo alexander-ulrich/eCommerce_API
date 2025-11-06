@@ -1,14 +1,21 @@
+import {
+  deleteOrderByID,
+  getAllOrders,
+  getOrderByID,
+  placeOrder,
+  updateOrderByID,
+} from "#controllers";
 import { Router } from "express";
 
 const orderRouter = Router();
 
 //Valid Routes
-// orderRouter.get("/", getAllOrders);
-// orderRouter.post("/", placeNewOrder);
+orderRouter.get("/", getAllOrders);
+orderRouter.post("/", placeOrder);
 
-// orderRouter.get("/:id", getOrderByID);
-// orderRouter.put("/:id", updateOrderByID);
-// orderRouter.delete("/:id", deleteOrderByID);
+orderRouter.get("/:id", getOrderByID);
+orderRouter.put("/:id", updateOrderByID);
+orderRouter.delete("/:id", deleteOrderByID);
 
 //Method not allowed
 orderRouter.put("/", (req, res) =>
