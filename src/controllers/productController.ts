@@ -20,7 +20,7 @@ export const getAllProducts: RequestHandler<
     productList = await Product.find().populate("categoryId");
   }
   if (!productList.length)
-    throw new Error("No Products found.", { cause: 404 });
+    throw new Error("No Products found.", { cause: { status: 404 } });
 
   return res.json(productList);
 };
@@ -33,9 +33,12 @@ export const createNewProduct: RequestHandler<
   const { name, categoryId } = req.body;
   const product = await Product.findOne({ name });
   if (product)
-    throw new Error("Product with this name already exists!", { cause: 409 });
+    throw new Error("Product with this name already exists!", {
+      cause: { status: 409 },
+    });
   const category = await Category.findById(categoryId);
-  if (!category) throw new Error("Invalid Product category!", { cause: 400 });
+  if (!category)
+    throw new Error("Invalid Product category!", { cause: { status: 400 } });
   const newProduct = await Product.create<ProductInputDTO>(req.body);
 
   return res.status(201).json(await Product.populate(newProduct, "categoryId"));
@@ -48,7 +51,8 @@ export const getProductByID: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
   const product = await Product.findById(id).populate("categoryId");
-  if (!product) throw new Error("Product not found.", { cause: 404 });
+  if (!product)
+    throw new Error("Product not found.", { cause: { status: 404 } });
 
   return res.json(product);
 };
@@ -63,13 +67,17 @@ export const updateProductByID: RequestHandler<
 
   const product = await Product.findOne({ name });
   if (product)
-    throw new Error("Product with this name already exists!", { cause: 409 });
+    throw new Error("Product with this name already exists!", {
+      cause: { status: 409 },
+    });
 
   const category = await Category.findById(categoryId);
-  if (!category) throw new Error("Invalid Product category!", { cause: 400 });
+  if (!category)
+    throw new Error("Invalid Product category!", { cause: { status: 400 } });
 
   let oldProduct = await Product.findById(id).populate("categoryId");
-  if (!oldProduct) throw new Error("Product not found.", { cause: 404 });
+  if (!oldProduct)
+    throw new Error("Product not found.", { cause: { status: 404 } });
 
   oldProduct.name = name;
   oldProduct.description = description;
@@ -91,7 +99,8 @@ export const deleteProductByID: RequestHandler<
   const deletedProduct = await Product.findByIdAndDelete(id, {
     new: true,
   }).populate("categoryId");
-  if (!deletedProduct) throw new Error("Product not found.", { cause: 404 });
+  if (!deletedProduct)
+    throw new Error("Product not found.", { cause: { status: 404 } });
 
   return res.json(deletedProduct);
 };

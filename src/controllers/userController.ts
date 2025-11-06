@@ -1,10 +1,10 @@
 import type z from "zod";
-import { userInputSchema } from "#schemas";
+import { userInputSchema, userSchema } from "#schemas";
 import type { RequestHandler } from "express";
 import { User } from "#models";
 
 type UserInputDTO = z.infer<typeof userInputSchema>;
-type UserDTO = UserInputDTO;
+type UserDTO = z.infer<typeof userSchema>;
 
 export const getAllUsers: RequestHandler<unknown, UserDTO[], unknown> = async (
   req,
@@ -13,7 +13,7 @@ export const getAllUsers: RequestHandler<unknown, UserDTO[], unknown> = async (
   const userList = await User.find();
 
   if (!userList.length)
-    throw new Error("No registered Users found.", { cause: 404 });
+    throw new Error("No registered Users found.", { cause: { status: 404 } });
 
   return res.json(userList);
 };
@@ -26,7 +26,9 @@ export const registerUser: RequestHandler<
   const { email } = req.body;
   const user = await User.findOne({ email }).select("-password");
   if (user)
-    throw new Error("User with this E-Mail already exists!", { cause: 409 });
+    throw new Error("User with this E-Mail already exists!", {
+      cause: { status: 409 },
+    });
 
   await User.create<UserInputDTO>(req.body);
   const newUser = await User.findOne({ email }).select("-password");
@@ -41,7 +43,7 @@ export const getUserByID: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).select("-password");
-  if (!user) throw new Error("User not found.", { cause: 404 });
+  if (!user) throw new Error("User not found.", { cause: { status: 404 } });
 
   return res.json(user);
 };
@@ -52,9 +54,9 @@ export const updateUserByID: RequestHandler<
   UserInputDTO
 > = async (req, res) => {
   const { id } = req.params;
-  const { name, email, password } = req.body as UserDTO;
+  const { name, email, password } = req.body as UserInputDTO;
   let user = await User.findById(id).select("-password");
-  if (!user) throw new Error("User not found.", { cause: 404 });
+  if (!user) throw new Error("User not found.", { cause: { status: 404 } });
 
   user.name = name;
   user.email = email;
@@ -72,8 +74,12 @@ export const deleteUserByID: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
 
-  const deletedUser = await User.findByIdAndDelete(id, { new: true });
-  if (!deletedUser) throw new Error("User not found.", { cause: 404 });
+  const deletedUser = await User.findByIdAndDelete(id, {
+    new: true,
+    runValidators: true,
+  });
+  if (!deletedUser)
+    throw new Error("User not found.", { cause: { status: 404 } });
 
   return res.json(deletedUser);
 };
