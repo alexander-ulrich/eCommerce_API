@@ -14,7 +14,7 @@ export const getAllCategories: RequestHandler<
   const categoryList = await Category.find();
 
   if (!categoryList.length)
-    throw new Error("No Categories found.", { cause: 404 });
+    throw new Error("No Categories found.", { cause: { status: 404 } });
 
   return res.json(categoryList);
 };
@@ -27,7 +27,9 @@ export const createNewCategory: RequestHandler<
   const { name } = req.body;
   const category = await Category.findOne({ name });
   if (category)
-    throw new Error("Category with this name already exists!", { cause: 409 });
+    throw new Error("Category with this name already exists!", {
+      cause: { status: 409 },
+    });
 
   const newCategory = await Category.create<CategoryInputDTO>(req.body);
 
@@ -41,7 +43,8 @@ export const getCategoryByID: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
   const category = await Category.findById(id);
-  if (!category) throw new Error("Category not found.", { cause: 404 });
+  if (!category)
+    throw new Error("Category not found.", { cause: { status: 404 } });
 
   return res.json(category);
 };
@@ -54,7 +57,8 @@ export const updateCategoryByID: RequestHandler<
   const { id } = req.params;
   const { name } = req.body as CategoryDTO;
   let category = await Category.findById(id);
-  if (!category) throw new Error("Category not found.", { cause: 404 });
+  if (!category)
+    throw new Error("Category not found.", { cause: { status: 404 } });
 
   category.name = name;
 
@@ -73,7 +77,8 @@ export const deleteCategoryByID: RequestHandler<
   const deletedCategory = await Category.findByIdAndDelete(id, {
     new: true,
   });
-  if (!deletedCategory) throw new Error("Category not found.", { cause: 404 });
+  if (!deletedCategory)
+    throw new Error("Category not found.", { cause: { status: 404 } });
 
   return res.json(deletedCategory);
 };

@@ -24,3 +24,18 @@ export const userInputSchema = z
       ),
   })
   .strict();
+
+export const userSchema = z
+  .object({
+    name: z
+      .string({ message: "Name is required." })
+      .min(2, { message: "Name must be at least 2 characters long." })
+      .trim(),
+    email: z
+      .string({ message: "Email is required." })
+      .regex(
+        /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_'+\-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i,
+        { message: "Email must be a valid email." }
+      ),
+  })
+  .strict();
