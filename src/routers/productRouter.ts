@@ -5,16 +5,22 @@ import {
   getProductByID,
   updateProductByID,
 } from "#controllers";
+import { validateBodyZod } from "#middlewares";
+import { productInputSchema } from "#schemas";
 import express, { Router } from "express";
 
 const productRouter = Router();
 
 //Valid Routes
 productRouter.get("/", express.urlencoded(), getAllProducts);
-productRouter.post("/", createNewProduct);
+productRouter.post("/", validateBodyZod(productInputSchema), createNewProduct);
 
 productRouter.get("/:id", getProductByID);
-productRouter.put("/:id", updateProductByID);
+productRouter.put(
+  "/:id",
+  validateBodyZod(productInputSchema),
+  updateProductByID
+);
 productRouter.delete("/:id", deleteProductByID);
 
 //Method not allowed

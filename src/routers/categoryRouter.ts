@@ -5,16 +5,26 @@ import {
   getCategoryByID,
   updateCategoryByID,
 } from "#controllers";
+import { validateBodyZod } from "#middlewares";
+import { categoryInputSchema } from "#schemas";
 import { Router } from "express";
 
 const categoryRouter = Router();
 
 //Valid Routes
 categoryRouter.get("/", getAllCategories);
-categoryRouter.post("/", createNewCategory);
+categoryRouter.post(
+  "/",
+  validateBodyZod(categoryInputSchema),
+  createNewCategory
+);
 
 categoryRouter.get("/:id", getCategoryByID);
-categoryRouter.put("/:id", updateCategoryByID);
+categoryRouter.put(
+  "/:id",
+  validateBodyZod(categoryInputSchema),
+  updateCategoryByID
+);
 categoryRouter.delete("/:id", deleteCategoryByID);
 
 //Method not allowed

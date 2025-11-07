@@ -70,7 +70,7 @@ export const updateCategoryByID: RequestHandler<
 export const deleteCategoryByID: RequestHandler<
   { id: string },
   CategoryDTO,
-  CategoryInputDTO
+  unknown
 > = async (req, res) => {
   const { id } = req.params;
 
