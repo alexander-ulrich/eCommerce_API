@@ -103,7 +103,7 @@ export const updateProductByID: RequestHandler<
 export const deleteProductByID: RequestHandler<
   { id: string },
   ProductDTO,
-  ProductInputDTO
+  unknown
 > = async (req, res) => {
   const { id } = req.params;
 

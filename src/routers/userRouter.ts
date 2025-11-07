@@ -5,16 +5,18 @@ import {
   registerUser,
   updateUserByID,
 } from "#controllers";
+import { validateBodyZod } from "#middlewares";
+import { userInputSchema, userSchema } from "#schemas";
 import { Router } from "express";
 
 const userRouter = Router();
 
 //Valid Routes
 userRouter.get("/", getAllUsers);
-userRouter.post("/", registerUser);
+userRouter.post("/", validateBodyZod(userInputSchema), registerUser);
 
 userRouter.get("/:id", getUserByID);
-userRouter.put("/:id", updateUserByID);
+userRouter.put("/:id", validateBodyZod(userSchema), updateUserByID);
 userRouter.delete("/:id", deleteUserByID);
 
 //Method not allowed

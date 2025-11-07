@@ -5,16 +5,18 @@ import {
   placeOrder,
   updateOrderByID,
 } from "#controllers";
+import { validateBodyZod } from "#middlewares";
+import { orderInputSchema } from "#schemas";
 import { Router } from "express";
 
 const orderRouter = Router();
 
 //Valid Routes
 orderRouter.get("/", getAllOrders);
-orderRouter.post("/", placeOrder);
+orderRouter.post("/", validateBodyZod(orderInputSchema), placeOrder);
 
 orderRouter.get("/:id", getOrderByID);
-orderRouter.put("/:id", updateOrderByID);
+orderRouter.put("/:id", validateBodyZod(orderInputSchema), updateOrderByID);
 orderRouter.delete("/:id", deleteOrderByID);
 
 //Method not allowed
