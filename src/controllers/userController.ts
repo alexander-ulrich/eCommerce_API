@@ -26,8 +26,8 @@ export const registerUser: RequestHandler<
   const { email } = req.body;
   const user = await User.findOne({ email }).select("-password").lean();
   if (user)
-    throw new Error("User with this E-Mail already exists!", {
-      cause: { status: 409 },
+    throw new Error("Registration failed!", {
+      cause: { status: 400 },
     });
 
   await User.create<UserInputDTO>(req.body);
@@ -42,7 +42,7 @@ export const getUserByID: RequestHandler<
   unknown
 > = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id).select("-password").lean();
+  const user = await User.findById(id).select("-password");
   if (!user) throw new Error("User not found.", { cause: { status: 404 } });
 
   return res.json(user);

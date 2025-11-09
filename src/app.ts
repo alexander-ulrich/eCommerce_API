@@ -8,6 +8,8 @@ import {
 } from "#routers";
 import express from "express";
 import cors from "cors";
+import swaggerUI from "swagger-ui-express";
+import { openapiSpec } from "#docs";
 
 const app = express();
 const port = 3000;
@@ -23,6 +25,9 @@ app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
 app.use("/products", productRouter);
 app.use("/orders", orderRouter);
+
+// Documentation
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(openapiSpec));
 
 //Error Handling
 app.use(errorHandler);
