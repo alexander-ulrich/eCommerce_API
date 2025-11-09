@@ -1,4 +1,4 @@
-import { Order, Product } from "#models";
+import { Order, Product, User } from "#models";
 import type { orderInputSchema } from "#schemas";
 import type { RequestHandler } from "express";
 import mongoose from "mongoose";
@@ -34,6 +34,10 @@ export const placeOrder: RequestHandler<
 > = async (req, res) => {
   const { products, userId } = req.body;
   let total = 0;
+
+  let user = await User.findById(userId);
+  if (!user) throw new Error("User not found.", { cause: { status: 404 } });
+
   for (const p of products) {
     const product = await Product.findById(p.lineItem).lean();
     if (!product)
@@ -69,6 +73,10 @@ export const updateOrderByID: RequestHandler<
 > = async (req, res) => {
   const { id } = req.params;
   const { products, userId } = req.body as OrderInputDTO;
+
+  let user = await User.findById(userId);
+  if (!user) throw new Error("User not found.", { cause: { status: 404 } });
+
   let order = await Order.findById(id);
   if (!order) throw new Error("Order not found.", { cause: { status: 404 } });
 
