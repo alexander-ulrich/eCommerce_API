@@ -81,8 +81,21 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       OrderProductLine: {
         type: "object",
         properties: {
-          lineItem: { type: "string", example: "690a2b718c1d0a3f54c8e557" },
+          lineItem: {
+            oneOf: [
+              {
+                type: "object",
+                properties: {
+                  _id: { type: "string" },
+                  name: { type: "string" },
+                  price: { type: "number" },
+                },
+              },
+              { type: "string" },
+            ],
+          },
           quantity: { type: "integer", example: 3, minimum: 1 },
+          _id: { type: "string" },
         },
         required: ["lineItem", "quantity"],
       },
@@ -125,11 +138,11 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       UserInput: {
         type: "object",
         properties: {
-          name: { type: "string", example: "User33" },
+          name: { type: "string", example: "User3" },
           email: {
             type: "string",
             format: "email",
-            example: "user33@mail.com",
+            example: "user3@mail.com",
           },
           password: { type: "string", example: "AbcD!123" },
         },
@@ -138,11 +151,11 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       UserInputNoPW: {
         type: "object",
         properties: {
-          name: { type: "string", example: "User33" },
+          name: { type: "string", example: "User 3" },
           email: {
             type: "string",
             format: "email",
-            example: "user33@mail.com",
+            example: "user3@mail.com",
           },
         },
         required: ["name", "email"],
@@ -240,6 +253,7 @@ export const openapiSpec: OpenAPIV3_1.Document = {
         in: "query",
         required: false,
         schema: { type: "string" },
+        example: "69112380f8fc7e52df1668f2",
       },
     },
   },
@@ -259,6 +273,40 @@ export const openapiSpec: OpenAPIV3_1.Document = {
                   type: "array",
                   items: { $ref: "#/components/schemas/Product" },
                 },
+                example: [
+                  {
+                    _id: "690a2b718c1d0a3f54c8e557",
+                    name: "Laptop",
+                    description: "High-performance laptop",
+                    price: 1999.99,
+                    categoryId: {
+                      _id: "690a29b59f88ad4e24a82a18",
+                      name: "Electronics",
+                      createdAt: "2025-11-04T16:28:38.000Z",
+                      updatedAt: "2025-11-04T16:31:20.550Z",
+                      __v: 0,
+                    },
+                    createdAt: "2025-11-04T16:36:01.705Z",
+                    updatedAt: "2025-11-10T18:15:49.048Z",
+                    __v: 0,
+                  },
+                  {
+                    _id: "690a2e8b14bd8de1122d3423",
+                    name: "Gaming Mouse",
+                    description: "Wireless gaming mouse",
+                    price: 59.99,
+                    categoryId: {
+                      _id: "690a29b59f88ad4e24a82a18",
+                      name: "Electronics",
+                      createdAt: "2025-11-04T16:28:38.000Z",
+                      updatedAt: "2025-11-04T16:31:20.550Z",
+                      __v: 0,
+                    },
+                    createdAt: "2025-11-04T16:49:15.988Z",
+                    updatedAt: "2025-11-04T16:49:15.988Z",
+                    __v: 0,
+                  },
+                ],
               },
             },
           },
@@ -283,6 +331,12 @@ export const openapiSpec: OpenAPIV3_1.Document = {
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/ProductInput" },
+              example: {
+                name: "iPhone 16",
+                description: "Latest model iPhone with advanced features",
+                price: 899.99,
+                categoryId: "690a29b59f88ad4e24a82a18",
+              },
             },
           },
         },
@@ -292,6 +346,20 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Product" },
+                example: {
+                  _id: "690a3537ae234b0fc230f823",
+                  name: "iPhone 16",
+                  description: "Latest model iPhone with advanced features",
+                  price: 899.99,
+                  categoryId: {
+                    _id: "690a29b59f88ad4e24a82a18",
+                    name: "Electronics",
+                    createdAt: "2025-11-10T18:01:56.796Z",
+                    updatedAt: "2025-11-10T18:01:56.796Z",
+                  },
+                  createdAt: "2025-11-10T18:01:56.796Z",
+                  updatedAt: "2025-11-10T18:01:56.796Z",
+                },
               },
             },
           },
@@ -327,13 +395,36 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       get: {
         summary: "Get product by id",
         tags: ["Products"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690a2b718c1d0a3f54c8e557",
+          },
+        ],
         responses: {
           "200": {
             description: "Product found",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Product" },
+                example: {
+                  _id: "690a2b718c1d0a3f54c8e557",
+                  name: "Laptop",
+                  description: "High-performance laptop",
+                  price: 1999.99,
+                  categoryId: {
+                    _id: "690a29b59f88ad4e24a82a18",
+                    name: "Electronics",
+                    createdAt: "2025-11-10T07:00:00.000Z",
+                    updatedAt: "2025-11-10T07:00:00.000Z",
+                  },
+                  createdAt: "2025-11-10T08:00:00.000Z",
+                  updatedAt: "2025-11-10T08:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -353,12 +444,26 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       put: {
         summary: "Update product by id",
         tags: ["Products"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690a2b718c1d0a3f54c8e557",
+          },
+        ],
         requestBody: {
           required: true,
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/ProductInput" },
+              example: {
+                name: "Gaming Laptop",
+                description: "High-performance gaming laptop with RTX 4090",
+                price: 2499.99,
+                categoryId: "690a29b59f88ad4e24a82a18",
+              },
             },
           },
         },
@@ -368,6 +473,21 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Product" },
+                example: {
+                  _id: "690a2b718c1d0a3f54c8e557",
+                  name: "Gaming Laptop",
+                  description: "High-performance gaming laptop with RTX 4090",
+                  price: 2499.99,
+                  categoryId: {
+                    _id: "690a29b59f88ad4e24a82a18",
+                    name: "Electronics",
+                    createdAt: "2025-11-10T07:00:00.000Z",
+                    updatedAt: "2025-11-10T07:00:00.000Z",
+                  },
+                  createdAt: "2025-11-10T08:00:00.000Z",
+                  updatedAt: "2025-11-10T19:30:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -408,6 +528,21 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Product" },
+                example: {
+                  _id: "690a2b718c1d0a3f54c8e557",
+                  name: "Laptop",
+                  description: "High-performance laptop",
+                  price: 1999.99,
+                  categoryId: {
+                    _id: "690a29b59f88ad4e24a82a18",
+                    name: "Electronics",
+                    createdAt: "2025-11-10T07:00:00.000Z",
+                    updatedAt: "2025-11-10T07:00:00.000Z",
+                  },
+                  createdAt: "2025-11-10T08:00:00.000Z",
+                  updatedAt: "2025-11-10T08:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -439,6 +574,29 @@ export const openapiSpec: OpenAPIV3_1.Document = {
                   type: "array",
                   items: { $ref: "#/components/schemas/Category" },
                 },
+                example: [
+                  {
+                    _id: "690a29b59f88ad4e24a82a18",
+                    name: "Electronics",
+                    createdAt: "2025-11-10T07:00:00.000Z",
+                    updatedAt: "2025-11-10T07:00:00.000Z",
+                    __v: 0,
+                  },
+                  {
+                    _id: "690cfac8074754553d5dedf7",
+                    name: "Books",
+                    createdAt: "2025-11-10T07:30:00.000Z",
+                    updatedAt: "2025-11-10T07:30:00.000Z",
+                    __v: 0,
+                  },
+                  {
+                    _id: "69112380f8fc7e52df1668f2",
+                    name: "Clothing",
+                    createdAt: "2025-11-10T08:00:00.000Z",
+                    updatedAt: "2025-11-10T08:00:00.000Z",
+                    __v: 0,
+                  },
+                ],
               },
             },
           },
@@ -463,6 +621,7 @@ export const openapiSpec: OpenAPIV3_1.Document = {
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/CategoryInput" },
+              example: { name: "Furniture" },
             },
           },
         },
@@ -472,6 +631,13 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Category" },
+                example: {
+                  _id: "690a29b59f88ad4e24a82a18",
+                  name: "Furniture",
+                  createdAt: "2025-11-10T07:00:00.000Z",
+                  updatedAt: "2025-11-10T07:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -494,13 +660,28 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       get: {
         summary: "Get category by id",
         tags: ["Categories"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690cfac8074754553d5dedf7",
+          },
+        ],
         responses: {
           "200": {
             description: "Category found",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Category" },
+                example: {
+                  _id: "690a29b59f88ad4e24a82a18",
+                  name: "Electronics",
+                  createdAt: "2025-11-10T07:00:00.000Z",
+                  updatedAt: "2025-11-10T07:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -520,12 +701,21 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       put: {
         summary: "Update category by id",
         tags: ["Categories"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690cfac8074754553d5dedf7",
+          },
+        ],
         requestBody: {
           required: true,
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/CategoryInput" },
+              example: { name: "Luxury furniture" },
             },
           },
         },
@@ -535,6 +725,13 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Category" },
+                example: {
+                  _id: "690a29b59f88ad4e24a82a18",
+                  name: "Luxury furniture",
+                  createdAt: "2025-11-10T07:00:00.000Z",
+                  updatedAt: "2025-11-10T07:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -561,6 +758,13 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Category" },
+                example: {
+                  _id: "690a29b59f88ad4e24a82a18",
+                  name: "Electronics",
+                  createdAt: "2025-11-10T07:00:00.000Z",
+                  updatedAt: "2025-11-10T07:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -592,6 +796,24 @@ export const openapiSpec: OpenAPIV3_1.Document = {
                   type: "array",
                   items: { $ref: "#/components/schemas/User" },
                 },
+                example: [
+                  {
+                    _id: "690a10df1d8bd6d55c7a56a3",
+                    name: "John Doe",
+                    email: "jdoe@mail.com",
+                    createdAt: "2025-11-10T10:30:00.000Z",
+                    updatedAt: "2025-11-10T10:30:00.000Z",
+                    __v: 0,
+                  },
+                  {
+                    _id: "690d10a6011018a21988877b",
+                    name: "Jane Smith",
+                    email: "jsmith@mail.com",
+                    createdAt: "2025-11-10T11:00:00.000Z",
+                    updatedAt: "2025-11-10T11:00:00.000Z",
+                    __v: 0,
+                  },
+                ],
               },
             },
           },
@@ -616,6 +838,11 @@ export const openapiSpec: OpenAPIV3_1.Document = {
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/UserInput" },
+              example: {
+                name: "Jasmin Smith",
+                email: "jassmith@mail.com",
+                password: "AbcD!1234",
+              },
             },
           },
         },
@@ -625,6 +852,14 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/User" },
+                example: {
+                  _id: "690d10a6011018a21988877b",
+                  name: "Jane Smith",
+                  email: "jsmith@mail.com",
+                  createdAt: "2025-11-10T11:00:00.000Z",
+                  updatedAt: "2025-11-10T11:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -647,13 +882,29 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       get: {
         summary: "Get user by id",
         tags: ["Users"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690d10a6011018a21988877b",
+          },
+        ],
         responses: {
           "200": {
             description: "User found",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/User" },
+                example: {
+                  _id: "690a10df1d8bd6d55c7a56a3",
+                  name: "John Doe",
+                  email: "jdoe@mail.com",
+                  createdAt: "2025-11-10T10:30:00.000Z",
+                  updatedAt: "2025-11-10T10:30:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -673,12 +924,24 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       put: {
         summary: "Update user by id",
         tags: ["Users"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690a10df1d8bd6d55c7a56a3",
+          },
+        ],
         requestBody: {
           required: true,
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/UserInputNoPW" },
+              example: {
+                name: "Johnathan Doe",
+                email: "johnathan.doe@mail.com",
+              },
             },
           },
         },
@@ -688,6 +951,14 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/User" },
+                example: {
+                  _id: "690a10df1d8bd6d55c7a56a3",
+                  name: "Jamie Doe",
+                  email: "jamie.doe@mail.com",
+                  createdAt: "2025-11-10T10:30:00.000Z",
+                  updatedAt: "2025-11-10T10:30:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -714,6 +985,14 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/User" },
+                example: {
+                  _id: "690a10df1d8bd6d55c7a56a3",
+                  name: "John Doe",
+                  email: "jdoe@mail.com",
+                  createdAt: "2025-11-10T10:30:00.000Z",
+                  updatedAt: "2025-11-10T10:30:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -745,6 +1024,79 @@ export const openapiSpec: OpenAPIV3_1.Document = {
                   type: "array",
                   items: { $ref: "#/components/schemas/Order" },
                 },
+                example: [
+                  {
+                    _id: "690d0193cf6cfdbb7032a5ee",
+                    userId: {
+                      _id: "690a10df1d8bd6d55c7a56a3",
+                      name: "John Doe",
+                    },
+                    products: [
+                      {
+                        lineItem: {
+                          _id: "690a2b718c1d0a3f54c8e557",
+                          name: "Laptop",
+                          price: 1999.99,
+                        },
+                        quantity: 2,
+                        _id: "6912222ea31ea1a843124ef3",
+                      },
+                      {
+                        lineItem: {
+                          _id: "690a2e8b14bd8de1122d3423",
+                          name: "Gaming Mouse",
+                          price: 59.99,
+                        },
+                        quantity: 4,
+                        _id: "6912222ea31ea1a843124ef4",
+                      },
+                    ],
+                    total: 4239.94,
+                    createdAt: "2025-11-06T20:14:11.094Z",
+                    updatedAt: "2025-11-10T17:34:38.899Z",
+                    __v: 0,
+                  },
+                  {
+                    _id: "691224c4a31ea1a843124f2c",
+                    userId: {
+                      _id: "690d10a6011018a21988877b",
+                      name: "Jane Smith",
+                    },
+                    products: [
+                      {
+                        lineItem: {
+                          _id: "690a2b718c1d0a3f54c8e557",
+                          name: "Laptop",
+                          price: 1999.99,
+                        },
+                        quantity: 2,
+                        _id: "691224c4a31ea1a843124f2d",
+                      },
+                      {
+                        lineItem: {
+                          _id: "690a3537ae234b0fc230f823",
+                          name: "T-Shirt",
+                          price: 12.99,
+                        },
+                        quantity: 2,
+                        _id: "691224c4a31ea1a843124f2e",
+                      },
+                      {
+                        lineItem: {
+                          _id: "690a2e8b14bd8de1122d3423",
+                          name: "Gaming Mouse",
+                          price: 59.99,
+                        },
+                        quantity: 2,
+                        _id: "691224c4a31ea1a843124f2f",
+                      },
+                    ],
+                    total: 4145.94,
+                    createdAt: "2025-11-10T17:45:40.358Z",
+                    updatedAt: "2025-11-10T17:45:40.358Z",
+                    __v: 0,
+                  },
+                ],
               },
             },
           },
@@ -769,6 +1121,19 @@ export const openapiSpec: OpenAPIV3_1.Document = {
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/OrderInput" },
+              example: {
+                userId: "690a10df1d8bd6d55c7a56a3",
+                products: [
+                  {
+                    lineItem: "690a2b718c1d0a3f54c8e557",
+                    quantity: 2,
+                  },
+                  {
+                    lineItem: "690a2e8b14bd8de1122d3423",
+                    quantity: 4,
+                  },
+                ],
+              },
             },
           },
         },
@@ -778,6 +1143,37 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Order" },
+                example: {
+                  _id: "691225f0a31ea1a843124f35",
+                  userId: {
+                    _id: "690a10df1d8bd6d55c7a56a3",
+                    name: "John Doe",
+                  },
+                  products: [
+                    {
+                      lineItem: {
+                        _id: "690a2b718c1d0a3f54c8e557",
+                        name: "Laptop",
+                        price: 1999.99,
+                      },
+                      quantity: 2,
+                      _id: "691225f0a31ea1a843124f36",
+                    },
+                    {
+                      lineItem: {
+                        _id: "690a2e8b14bd8de1122d3423",
+                        name: "Gaming Mouse",
+                        price: 59.99,
+                      },
+                      quantity: 2,
+                      _id: "691225f0a31ea1a843124f37",
+                    },
+                  ],
+                  total: 2119.97,
+                  createdAt: "2025-11-10T18:00:00.000Z",
+                  updatedAt: "2025-11-10T18:00:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -813,13 +1209,52 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       get: {
         summary: "Get order by id",
         tags: ["Orders"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690d0193cf6cfdbb7032a5ee",
+          },
+        ],
         responses: {
           "200": {
             description: "Order found",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Order" },
+                example: {
+                  _id: "690d0193cf6cfdbb7032a5ee",
+                  userId: {
+                    _id: "690a10df1d8bd6d55c7a56a3",
+                    name: "John Doe",
+                  },
+                  products: [
+                    {
+                      lineItem: {
+                        _id: "690a2b718c1d0a3f54c8e557",
+                        name: "Laptop",
+                        price: 1999.99,
+                      },
+                      quantity: 2,
+                      _id: "6912222ea31ea1a843124ef3",
+                    },
+                    {
+                      lineItem: {
+                        _id: "690a2e8b14bd8de1122d3423",
+                        name: "Gaming Mouse",
+                        price: 59.99,
+                      },
+                      quantity: 4,
+                      _id: "6912222ea31ea1a843124ef4",
+                    },
+                  ],
+                  total: 4239.94,
+                  createdAt: "2025-11-06T20:14:11.094Z",
+                  updatedAt: "2025-11-10T17:34:38.899Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -839,12 +1274,33 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       put: {
         summary: "Update order by id",
         tags: ["Orders"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            example: "690d0193cf6cfdbb7032a5ee",
+          },
+        ],
         requestBody: {
           required: true,
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/OrderInput" },
+              example: {
+                userId: "690a10df1d8bd6d55c7a56a3",
+                products: [
+                  {
+                    lineItem: "690a2b718c1d0a3f54c8e557",
+                    quantity: 2,
+                  },
+                  {
+                    lineItem: "690a2e8b14bd8de1122d3423",
+                    quantity: 2,
+                  },
+                ],
+              },
             },
           },
         },
@@ -854,6 +1310,37 @@ export const openapiSpec: OpenAPIV3_1.Document = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Order" },
+                example: {
+                  _id: "690d0193cf6cfdbb7032a5ee",
+                  userId: {
+                    _id: "690a10df1d8bd6d55c7a56a3",
+                    name: "John Doe",
+                  },
+                  products: [
+                    {
+                      lineItem: {
+                        _id: "690a2b718c1d0a3f54c8e557",
+                        name: "Laptop",
+                        price: 1999.99,
+                      },
+                      quantity: 3,
+                      _id: "6912222ea31ea1a843124ef3",
+                    },
+                    {
+                      lineItem: {
+                        _id: "690a2e8b14bd8de1122d3423",
+                        name: "Gaming Mouse",
+                        price: 59.99,
+                      },
+                      quantity: 1,
+                      _id: "6912222ea31ea1a843124ef4",
+                    },
+                  ],
+                  total: 6059.96,
+                  createdAt: "2025-11-06T20:14:11.094Z",
+                  updatedAt: "2025-11-10T18:30:00.000Z",
+                  __v: 0,
+                },
               },
             },
           },
@@ -873,13 +1360,51 @@ export const openapiSpec: OpenAPIV3_1.Document = {
       delete: {
         summary: "Delete order by id",
         tags: ["Orders"],
-        parameters: [{ $ref: "#/components/parameters/IdParam" }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+          },
+        ],
         responses: {
           "200": {
             description: "Deleted order",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Order" },
+                example: {
+                  _id: "690d0193cf6cfdbb7032a5ee",
+                  userId: {
+                    _id: "690a10df1d8bd6d55c7a56a3",
+                    name: "John Doe",
+                  },
+                  products: [
+                    {
+                      lineItem: {
+                        _id: "690a2b718c1d0a3f54c8e557",
+                        name: "Laptop",
+                        price: 1999.99,
+                      },
+                      quantity: 2,
+                      _id: "6912222ea31ea1a843124ef3",
+                    },
+                    {
+                      lineItem: {
+                        _id: "690a2e8b14bd8de1122d3423",
+                        name: "Gaming Mouse",
+                        price: 59.99,
+                      },
+                      quantity: 4,
+                      _id: "6912222ea31ea1a843124ef4",
+                    },
+                  ],
+                  total: 4239.94,
+                  createdAt: "2025-11-06T20:14:11.094Z",
+                  updatedAt: "2025-11-10T17:34:38.899Z",
+                  __v: 0,
+                },
               },
             },
           },
