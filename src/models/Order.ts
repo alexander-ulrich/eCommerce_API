@@ -22,7 +22,7 @@ const lineItemSchema = new Schema({
 
 const orderSchema = new Schema(
   {
-    userId: { type: String, ref: "User", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     products: {
       type: [lineItemSchema],
       default: [],
