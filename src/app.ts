@@ -14,7 +14,7 @@ import { openapiSpec } from "#docs";
 const app = express();
 const port = 3000;
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "http://localhost:5173"],
   optionsSuccessStatus: 200,
 };
 //Middleware

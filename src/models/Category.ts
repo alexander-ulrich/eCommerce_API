@@ -1,5 +1,5 @@
 import type { categoryInputSchema } from "#schemas";
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 import type z from "zod";
 
 type CategoryType = z.infer<typeof categoryInputSchema>;
