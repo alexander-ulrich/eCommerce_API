@@ -1,12 +1,4 @@
-import { Document, model, Schema, Types } from "mongoose";
-
-// export interface IOrder extends Document {
-//   userId: string;
-//   products: [{ product: string; quantity: number }];
-//   total: number;
-//   createdAt?: Date;
-//   updatedAt?: Date;
-// }
+import { model, Schema } from "mongoose";
 
 const lineItemSchema = new Schema({
   lineItem: {

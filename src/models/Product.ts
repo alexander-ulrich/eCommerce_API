@@ -1,13 +1,5 @@
 import { Document, model, Schema } from "mongoose";
 
-// interface IProduct extends Document {
-//   name: string;
-//   description: string;
-//   price: number;
-//   categoryId: string;
-//   createdAt?: Date;
-//   updatedAt?: Date;
-// }
 const productSchema = new Schema(
   {
     name: { type: String, required: true },
